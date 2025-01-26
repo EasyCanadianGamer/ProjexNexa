@@ -37,7 +37,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
             <span className={`text-xs px-2 py-1 rounded-full ${getPriorityColor(project.priority)}`}>
               {project.priority} Priority
             </span>
-            <span className="text-xs px-2 py-1 rounded-full bg-blue-50 text-blue-600"> Category
+            <span className="text-xs px-2 py-1 rounded-full bg-blue-50 text-blue-600"> 
               {project.category}
             </span>
           </div>

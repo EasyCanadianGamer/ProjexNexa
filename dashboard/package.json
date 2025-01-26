@@ -12,6 +12,7 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.0.0",
     "@tauri-apps/cli": "^2.2.7",
+    "@tauri-apps/plugin-clipboard-manager": "^2.2.0",
     "exceljs": "^4.4.0",
     "file-saver": "^2.0.5",
     "idb": "^8.0.1",
