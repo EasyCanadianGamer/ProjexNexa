@@ -7,7 +7,7 @@ ProjexNexa is a modern project dashboard built from the ground-up to be a easy w
 * Upload and import project lists from a excel sheet
 * and most importantly is Open Source Software (OSS)!
 
-ProjexNexa is currently under development. You give your suggestions on the discussion page.
+ProjexNexa is currently under development. You give your suggestions on the [discussions](https://github.com/EasyCanadianGamer/ProjexNexa/discussions) page.
 
 If you feel comfortable in writing code using Typescript and Rust, we highly encourage you to contribute to this project.
 
@@ -32,11 +32,11 @@ If you want to install Xplorer on your system, you can download the installer fo
 
 ## Bug Reporting
 
-If you find any bugs, please report it by submitting an issue on our issue page with a detailed explanation. Giving some screenshots would also be very helpful.
+If you find any bugs, please report it by submitting an issue on our [issues](https://github.com/EasyCanadianGamer/ProjexNexa/issues) page with a detailed explanation. Giving some screenshots would also be very helpful.
 
 ## Feature Request
 
-You can also submit a feature request on our issue page or discussions and we will try to implement it as soon as possible. If you want to contribute to this project, please contribute to this project.
+You can also submit a feature request on our [issue](https://github.com/EasyCanadianGamer/ProjexNexa/issues) page or [discussions](https://github.com/EasyCanadianGamer/ProjexNexa/discussions) and we will try to implement it as soon as possible. If you want to contribute to this project, please contribute to this project.
 
 ---
 
@@ -44,7 +44,7 @@ You can also submit a feature request on our issue page or discussions and we wi
 
 ---
 
-## Contribution Guide
+## Contribution Guide (Coming Soon)
 
 ---
 
