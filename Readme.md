@@ -19,6 +19,8 @@ If you feel comfortable in writing code using Typescript and Rust, we highly enc
   * [ ] change modes ( Light, Dark, and System Prefrence)
 * [ ] Auto Updates
 * [ ] Have it support MacOS and Linux
+  * [X] MacOS
+  * [ ] Linux
 
 Recommend us a feature by opening an [discussions](https://github.com/EasyCanadianGamer/ProjexNexa/discussions) if you'd like to.
 
