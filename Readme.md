@@ -42,9 +42,32 @@ You can also submit a feature request on our [issue](https://github.com/EasyCana
 
 ---
 
-## Archetecture (Coming Soon)
+## Archetecture
+
+ProjexNexa is a cross-platform application build using Tauri framework. Tauri is based on the OS specific webview and rust to work. Read about tauri here.
+
+ProjexNexa is a polygot applications. ProjexNexa relies on Rust and TS. The rust code are under `src-tauri` directory whereas the webview is in the `src` directory.
+
 
 ---
+
+## Development
+
+If you want to run this project in your local system, please follow this guide:
+
+1. Fork this project
+2. Clone this project using the command below ( replace `<your_github_username>`with your actual github username)
+   1. `https://github.com/<your_github_username>/ProjexNexa.git`
+3. Follow [this guide](https://v2.tauri.app/start/prerequisites/) to setup Tauri environment
+4. change directory
+   1. `cd ProjexNexa/dashboard`
+5. Install all dependencies using [npm](https://nodejs.org/en/download)
+   1. `npm install`
+6. Run the project in development mode. Please note it will takes some time for Cargo to install all dependencies for the first run.
+   1. `npx tauri dev`
+
+---
+
 
 ## Contribution Guide (Coming Soon)
 
