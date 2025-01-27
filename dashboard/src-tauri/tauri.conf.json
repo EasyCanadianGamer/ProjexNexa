@@ -1,8 +1,9 @@
+
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
-  "productName": "ProjectDashboard",
+  "productName": "ProjexNexa",
   "version": "0.1.0",
-  "identifier": "com.CanadianGamer.ProjectDashboard",
+  "identifier": "com.CanadianGamer.ProjexNexa",
   "build": {
     "frontendDist": "../dist",
     "devUrl": "http://localhost:5173",
@@ -10,11 +11,12 @@
     "beforeBuildCommand": "npm run build"
   },
   "app": {
+    "macOSPrivateApi": false,
     "windows": [
       {
-        "title": "Project Dashboard",
-        "width": 800,
-        "height": 600,
+        "title": "Projex-Nexa",
+        "width": 1100,
+        "height": 800,
         "resizable": true,
         "fullscreen": false
       }
@@ -33,7 +35,47 @@
       "icons/icon.icns",
       "icons/icon.ico"
     ],
-    "createUpdaterArtifacts": true
+    "linux": {
+      "appimage": {
+        "bundleMediaFramework": false,
+        "files": {}
+      },
+      "deb": {
+        "files": {}
+      },
+      "rpm": {
+        "epoch": 0,
+        "files": {},
+        "release": "1"
+      }
+    },
+    "macOS": {
+    "dmg": {
+      "appPosition": {
+        "x": 180,
+        "y": 170
+      },
+      "applicationFolderPosition": {
+        "x": 480,
+        "y": 170
+      },
+      "windowSize": {
+        "height": 400,
+        "width": 660
+      }
+    },
+    "files": {},
+    "hardenedRuntime": true,
+    "minimumSystemVersion": "10.13"
+  },
+  "windows": {
+				"certificateThumbprint": null,
+				"digestAlgorithm": "sha256",
+				"timestampUrl": "",
+        "wix":{
+          "template": "./wix/installer.wxs"
+        }
+			}
 
   }
 }
