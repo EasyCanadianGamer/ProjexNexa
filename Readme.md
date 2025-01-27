@@ -26,7 +26,7 @@ Recommend us a feature by opening an discussion if you'd like to.
 
 ## Installation
 
-If you want to install Xplorer on your system, you can download the installer for your operating system [on the release page](https://github.com/EasyCanadianGamer/ProjectManagement/releases). Please note that the current version is not stable yet, and you may encounter various bugs.
+If you want to install ProjexNexa on your system, you can download the installer for your operating system [on the release page](https://github.com/EasyCanadianGamer/ProjectManagement/releases). Please note that the current version is not stable yet, and you may encounter various bugs.
 
 ---
 
