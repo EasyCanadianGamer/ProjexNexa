@@ -20,7 +20,7 @@ If you feel comfortable in writing code using Typescript and Rust, we highly enc
 * [ ] Auto Updates
 * [ ] Have it support MacOS and Linux
 
-Recommend us a feature by opening an discussion if you'd like to.
+Recommend us a feature by opening an [discussions](https://github.com/EasyCanadianGamer/ProjexNexa/discussions) if you'd like to.
 
 ---
 
