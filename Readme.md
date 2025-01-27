@@ -50,7 +50,7 @@ You can also submit a feature request on our issue page or discussions and we wi
 
 ## LICENSE
 
-Apache-2.0
+[Apache-2.0](https://github.com/EasyCanadianGamer/ProjexNexa#Apache-2.0-1-ov-file)
 
 ---
 
