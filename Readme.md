@@ -18,6 +18,7 @@ If you feel comfortable in writing code using Typescript and Rust, we highly enc
 * [ ] Add settings
   * [ ] change modes ( Light, Dark, and System Prefrence)
 * [ ] Auto Updates
+* [ ] Change the days left to allow to use dates instead
 * [ ] Have it support MacOS and Linux
   * [X] MacOS
   * [ ] Linux
