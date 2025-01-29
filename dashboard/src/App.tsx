@@ -8,6 +8,8 @@ import { Project, ProjectFormData } from './components/types';
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 import { openDB } from 'idb';
+import { RxGear } from "react-icons/rx";
+import Settings from "./components/Settings";
 
 
 const App: React.FC = () => {
@@ -17,6 +19,7 @@ const App: React.FC = () => {
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [deleteModal, showDeleteModal] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
 
 
@@ -331,6 +334,10 @@ const App: React.FC = () => {
             >
               Import from Excel
             </label>
+
+            <button className="flex items-center gap-2 text-black px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors">
+            <RxGear />
+            </button>
           </div>
         </div>
 
