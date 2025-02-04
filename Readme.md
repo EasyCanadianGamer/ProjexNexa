@@ -57,8 +57,7 @@ ProjexNexa is a polygot applications. ProjexNexa relies on Rust and TS. The rust
 If you want to run this project in your local system, please follow this guide:
 
 1. Fork this project
-2. Clone this project using the command below ( replace `<your_github_username>`with your actual github username)
-   1. `https://github.com/<your_github_username>/ProjexNexa.git`
+2. Clone this project using the command below ``git clone https://www.github.com/EasyCanadianGamer/ProjectNexa``
 3. Follow [this guide](https://v2.tauri.app/start/prerequisites/) to setup Tauri environment
 4. change directory
    1. `cd ProjexNexa/dashboard`
