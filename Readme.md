@@ -70,7 +70,9 @@ If you want to run this project in your local system, please follow this guide:
 
 
 ## Contribution Guide 
-We highly encourage you to contribute to this project (even if you are a beginner). And if you finally want to contribute to this project, please read our contribution guide.
+We welcome contributions from the community! 🚀 
+
+Please check out our [Contribution Guide](CONTRIBUTING.md) for details on how to get started.
 
 
 ---
