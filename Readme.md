@@ -16,7 +16,8 @@ If you feel comfortable in writing code using Typescript and Rust, we highly enc
 ## Project Roadmap
 
 * [ ] Add settings
-  * [ ] change modes ( Light, Dark, and System Prefrence)
+  * [X] change modes ( Light, Dark, and System Prefrence)
+  * [x] Add a About sectio
 * [ ] Auto Updates
 * [ ] Change the days left to allow to use dates instead
 * [ ] Have it support MacOS and Linux
