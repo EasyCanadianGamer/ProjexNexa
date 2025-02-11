@@ -14,7 +14,9 @@ export type Milestone = {
     daysLeft: number;
     priority: "High" | "Medium" | "Low";
     category: string;
+    deadline: string | null;
     milestones: Milestone[];
   };
   
+
   export type ProjectFormData = Omit<Project, 'id' | 'progress'> & { id?: string };

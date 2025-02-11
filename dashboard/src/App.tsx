@@ -11,7 +11,6 @@ import { openDB } from 'idb';
 import { RxGear } from "react-icons/rx";
 import Settings from "./components/Settings";
 
-
 const App: React.FC = () => {
   const [hoveredMilestone, setHoveredMilestone] = useState<string | null>(null);
   const [projects, setProjects] = useState<Project[]>([]);
@@ -21,9 +20,13 @@ const App: React.FC = () => {
   const [deleteModal, showDeleteModal] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
+  const openSettings = () => {
+      setIsSettingsOpen(true);
+  };
 
-
-
+  const closeSettings = () => {
+      setIsSettingsOpen(false);
+  };
 
 
   // Create a BroadcastChannel
@@ -99,7 +102,6 @@ const App: React.FC = () => {
     name: '',
     description: '',
     tasks: { completed: 0, total: 0 },
-    daysLeft: 0,
     priority: 'Medium',
     category: '',
     milestones: [
@@ -107,8 +109,10 @@ const App: React.FC = () => {
       { percent: 40, name: '', descriptions: '', completed: false },
       { percent: 60, name: '', descriptions: '', completed: false },
       { percent: 80, name: '', descriptions: '', completed: false },
-      { percent: 100, name: '', descriptions: '', completed: false },
+      { percent: 100, name: '', descriptions: '', completed: false }
     ],
+    deadline: null,
+    daysLeft: 0,  // Initialize as 0 or calculate dynamically
   };
 
   const [formData, setFormData] = useState<ProjectFormData>(initialFormData);
@@ -188,6 +192,7 @@ const App: React.FC = () => {
         `${project.progress}%`,
         project.priority,
         project.daysLeft,
+        project.deadline,
         project.category,
         ...project.milestones.map(
           (milestone) =>
@@ -204,6 +209,7 @@ const App: React.FC = () => {
       { header: 'Progress', key: 'progress', width: 15 },
       { header: 'Priority', key: 'priority', width: 15 },
       { header: 'Days Left', key: 'daysLeft', width: 15 },
+      {header: 'Deadline', key: 'deadline', width: 15},
       { header: 'Category', key: 'category', width: 20 },
       { header: 'Milestone 1 (20%)', key: 'milestones1', width: 50 },
       { header: 'Milestone 2 (40%)', key: 'milestones2', width: 50 },
@@ -249,14 +255,15 @@ const App: React.FC = () => {
                 progress: parseInt(row.getCell(3).text, 10) || 0, // Progress (default to 0 if missing)
                 priority: (row.getCell(4).text as 'High' | 'Medium' | 'Low') || 'Medium', // Priority (default to 'Medium' if missing)
                 daysLeft: parseInt(row.getCell(5).text, 10) || 0, // Days Left (default to 0 if missing)
-                category: row.getCell(6).text || '', // Category (default to empty string if missing)
+                deadline: row.getCell(6).text || '',
+                category: row.getCell(7).text || '', // Category (default to empty string if missing)
                 tasks: { completed: 0, total: 0 }, // Default tasks
                 milestones: [
-                  parseMilestone(row.getCell(7).text, 20), // Milestone 1
-                  parseMilestone(row.getCell(8).text, 40), // Milestone 2
-                  parseMilestone(row.getCell(9).text, 60), // Milestone 3
-                  parseMilestone(row.getCell(10).text, 80), // Milestone 4
-                  parseMilestone(row.getCell(11).text, 100), // Milestone 5
+                  parseMilestone(row.getCell(8).text, 20), // Milestone 1
+                  parseMilestone(row.getCell(9).text, 40), // Milestone 2
+                  parseMilestone(row.getCell(10).text, 60), // Milestone 3
+                  parseMilestone(row.getCell(11).text, 80), // Milestone 4
+                  parseMilestone(row.getCell(12).text, 100), // Milestone 5
                 ],
               };
   
@@ -298,26 +305,27 @@ const App: React.FC = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
+<main id='main' >
+<div className="min-h-screen bg-gray-50 dark:bg-gray-900 dark:text-white p-8">
       <div className="max-w-full mx-auto">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-800">Projects Overview</h1>
+            <h1 className="text-3xl font-bold text-gray-800 dark:text-white p-8">Projects Overview</h1>
             <p className="text-gray-500">Track and manage your active projects</p>
           </div>
           <div className="flex gap-4">
             <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
             <button
               onClick={() => setIsFormOpen(true)}
-              className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+              className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors dark:bg-blue-300 dark:text-black dark:hover:bg-blue-400"
             >
               <Plus className="h-5 w-5" />
               New Project
             </button>
             <button
               onClick={exportToExcel}
-              className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
+              className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors dark:bg-green-300 dark:text-black dark:hover:bg-green-400"
             >
               Export to Excel
             </button>
@@ -330,19 +338,26 @@ const App: React.FC = () => {
             />
             <label
               htmlFor="file-upload"
-              className="flex items-center gap-2 bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors cursor-pointer"
+              className="flex items-center gap-2 bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors cursor-pointer dark:bg-purple-300 dark:text-black balck:hover:bg-purple:400"
             >
               Import from Excel
             </label>
 
-            <button className="flex items-center gap-2 text-black px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors">
-            <RxGear />
+            <button
+                className="flex items-center gap-2 text-black px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors dark:text-white dark:hover:bg-gray-600"
+                onClick={openSettings}
+            >
+                <RxGear />
+                Settings
             </button>
+
+            <Settings isOpen={isSettingsOpen} onClose={closeSettings} />
+
           </div>
         </div>
 
         {/* Project Form Modal */}
-        <ProjectForm
+        <ProjectForm 
           isFormOpen={isFormOpen}
           setIsFormOpen={setIsFormOpen}
           editingProject={editingProject}
@@ -369,6 +384,7 @@ const App: React.FC = () => {
         </div>
       </div>
     </div>
+</main>
   );
 };
 
