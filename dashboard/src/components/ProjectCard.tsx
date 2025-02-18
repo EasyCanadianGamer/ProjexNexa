@@ -28,16 +28,16 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
 
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+    <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow dark:bg-gray-900 dark:shadow-gray-500/50   ">
       {/* Project Header */}
       <div className="flex justify-between items-start mb-4">
         <div>
-          <h2 className="text-xl font-bold text-gray-800">Name: {project.name}</h2>
+          <h2 className="text-xl font-bold text-gray-800 dark:text-white">Name: {project.name}</h2>
           <div className="flex gap-2 mt-2">
-            <span className={`text-xs px-2 py-1 rounded-full ${getPriorityColor(project.priority)}`}>
+            <span className={`text-xs px-2 py-1 rounded-full   ${getPriorityColor(project.priority)}`}>
               {project.priority} Priority
             </span>
-            <span className="text-xs px-2 py-1 rounded-full bg-blue-50 text-blue-600"> 
+            <span className="text-xs px-2 py-1 rounded-full bg-blue-50 text-blue-600 "> 
               {project.category}
             </span>
           </div>
@@ -45,13 +45,13 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
         <div className="flex gap-2">
           <button 
             onClick={() => handleEdit(project)}
-            className="text-gray-400 hover:text-blue-600"
+            className="text-gray-400 hover:text-blue-600 dark:text-white"
           >
             <Edit2 className="h-5 w-5" />
           </button>
           <button 
             onClick={toggleDeleteModal}
-            className="text-gray-400 hover:text-red-600"
+            className="text-gray-400 hover:text-red-600 dark:text-white"
           >
             <X className="h-5 w-5" />
           </button>
@@ -68,7 +68,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
       </div>
 
       {/* Description */}
-      <p className="text-gray-600 text-sm mb-6 line-clamp-2">{project.description}</p>
+      <p className="text-gray-600 text-sm mb-6 line-clamp-2 dark:text-white">{project.description}</p>
 
       {/* Progress Section */}
       <ProgressBar 
@@ -79,25 +79,25 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
 
       {/* Stats Grid */}
       <div className="grid grid-cols-2 gap-4">
-        <div className="bg-blue-50 rounded-lg p-3 flex items-center space-x-3">
-          <div className="bg-blue-100 p-2 rounded-lg">
+        <div className="bg-blue-50 rounded-lg p-3 flex items-center space-x-3 dark:bg-blue-200">
+          <div className="bg-blue-100 p-2 rounded-lg dark:bg-blue-300">
             <CheckCircle2 className="h-5 w-5 text-blue-600" />
           </div>
           <div>
-            <p className="text-xs text-gray-600">Tasks</p>
+            <p className="text-xs text-gray-600 dark:text-gray-800 ">Tasks</p>
             <p className="text-sm font-semibold text-gray-900">
               {project.tasks.completed}/{project.tasks.total}
             </p>
           </div>
         </div>
 
-        <div className="bg-orange-50 rounded-lg p-3 flex items-center space-x-3">
-          <div className="bg-orange-100 p-2 rounded-lg">
+        <div className="bg-orange-50 rounded-lg p-3 flex items-center space-x-3 dark:bg-orange-200 ">
+          <div className="bg-orange-100 p-2 rounded-lg dark:bg-orange-300">
             <Clock className="h-5 w-5 text-orange-600" />
           </div>
           <div>
             <p className="text-xs text-gray-600">Days Left</p>
-            <p className="text-sm font-semibold text-gray-900">{project.daysLeft}</p>
+            <p className="text-sm font-semibold text-gray-900 dark:text-gray-1000">{project.daysLeft}</p>
           </div>
         </div>
       </div>

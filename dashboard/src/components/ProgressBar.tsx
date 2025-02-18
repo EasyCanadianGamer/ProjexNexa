@@ -19,12 +19,12 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
 //   };
 
   const getProgressColor = () => {
-    return 'bg-green-300';
+    return 'bg-green-300 dark:bg-green-600';
   };
   return (
     <div className="mb-6">
       <div className="flex items-center justify-between mb-2">
-        <span className="text-sm font-medium text-gray-700">Progress</span>
+        <span className="text-sm font-medium text-gray-700 dark:text-white">Progress</span>
         <span className="text-sm font-semibold text-gray-900">{project.progress}%</span>
       </div>
       <div className="relative">
@@ -38,7 +38,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
               onMouseEnter={() => setHoveredMilestone(`${project.id}-${milestone.percent}`)}
               onMouseLeave={() => setHoveredMilestone(null)}
             >
-              <div className={`h-full w-full rounded-full ${milestone.completed ? 'bg-green-600' : 'bg-gray-400'}`} />
+              <div className={`h-full w-full rounded-full ${milestone.completed ? 'bg-green-600 dark:bg-green-800' : 'bg-gray-400 dark:bg-gray-500'}`} />
               
               {/* Milestone tooltip */}
               {hoveredMilestone === `${project.id}-${milestone.percent}` && (
@@ -56,7 +56,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
         </div>
         
         {/* Progress bar */}
-        <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+        <div className="h-2 bg-gray-200 rounded-full overflow-hidden dark:bg-gray-700">
           <div 
             className={`h-full ${getProgressColor()} transition-all duration-500`}
             style={{ width: `${project.progress}%` }}

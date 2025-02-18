@@ -175,6 +175,7 @@ const App: React.FC = () => {
       'Progress',
       'Priority',
       'Days Left',
+      'Deadline',
       'Category',
       'Milestone 1 (20%)',
       'Milestone 2 (40%)',
@@ -220,7 +221,7 @@ const App: React.FC = () => {
 
     // Generate buffer
     const buffer = await workbook.xlsx.writeBuffer();
-
+  
     // Save file
     saveAs(new Blob([buffer]), 'projects.xlsx');
   };
@@ -348,7 +349,6 @@ const App: React.FC = () => {
                 onClick={openSettings}
             >
                 <RxGear />
-                Settings
             </button>
 
             <Settings isOpen={isSettingsOpen} onClose={closeSettings} />
