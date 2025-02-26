@@ -11,11 +11,12 @@
     "beforeBuildCommand": "npm run build"
   },
   "app": {
+    "enableGTKAppId": false,
     "macOSPrivateApi": false,
     "windows": [
       {
         "title": "Projex-Nexa",
-        "width": 1100,
+        "width": 1280,
         "height": 800,
         "resizable": true,
         "fullscreen": false

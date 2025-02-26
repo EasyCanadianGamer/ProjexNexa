@@ -87,3 +87,6 @@ Please check out our [Contribution Guide](CONTRIBUTING.md) for details on how to
 ## Love my work?
 
 <a href='https://ko-fi.com/C0C4V12R4' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://storage.ko-fi.com/cdn/kofi1.png?v=6' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+
+Linux Command for dev
+WEBKIT_DISABLE_DMABUF_RENDERER=1 npx tauri dev
