@@ -1,6 +1,6 @@
 # What is ProjexNexa?
 
-ProjexNexa is a modern project dashboard built from the ground-up to be a easy way to showcase your project's milestones and progress. ProjexNexa for now is for Windows but down the line its going to cross-platform and since its using [Tauri](https://tauri.studio/) framework, it can run on all platforms, Windows, MacOS, and Linux without any trouble. Some ProjexNexa's features in summary are:
+ProjexNexa is a modern project dashboard built from the ground-up to be a easy way to showcase your project's milestones and progress. ProjexNexa for now is for Windows but down the line its going to cross-platform and since its using [Tauri](https://v2.tauri.app/) framework, it can run on all platforms, Windows, MacOS, and Linux without any trouble. Some ProjexNexa's features in summary are:
 
 * It looks modern
 * Easy to use
