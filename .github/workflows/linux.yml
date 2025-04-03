@@ -1,0 +1,53 @@
+name: Tauri CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    # Setup Node.js
+    - name: Setup Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+
+    # Setup Rust
+    - name: Install Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        components: rustfmt, clippy
+        override: true
+
+    # Install dependencies
+    - name: Install dependencies
+      run: |
+        cd dashboard
+        npm install
+
+    # Build frontend
+    - name: Build frontend
+      run: |
+        cd dashboard
+        npm run build
+
+    # Build Tauri app
+    - name: Build Tauri
+      run: |
+        cd dashboard
+        npx tauri build
+
+    # Run tests (if you have any)
+    - name: Run tests
+      run: |
+        cd dashboard
+        npm test
