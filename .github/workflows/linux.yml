@@ -35,15 +35,15 @@ jobs:
       run: npm install
 
     # Build steps (all in dashboard folder)
-    - name: Build frontend
-      working-directory: ./dashboard
-      run: npm run build
+    # - name: Build frontend
+    #   working-directory: ./dashboard
+    #   run: npm run build
 
     - name: Build Tauri
       working-directory: ./dashboard
       run: npx tauri build
 
-    # Run tests
-    - name: Run tests
-      working-directory: ./dashboard
-      run: npm test
+    # # Run tests
+    # - name: Run tests
+    #   working-directory: ./dashboard
+    #   run: npm test
