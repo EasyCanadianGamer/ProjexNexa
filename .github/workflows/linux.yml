@@ -39,9 +39,9 @@ jobs:
     #   working-directory: ./dashboard
     #   run: npm run build
 
-    - name: Build Tauri
+    - name: Build Tauri Dev
       working-directory: ./dashboard
-      run: npx tauri build
+      run: WEBKIT_DISABLE_DMABUF_RENDERER=1 npx tauri dev
 
     # # Run tests
     # - name: Run tests
