@@ -6,11 +6,11 @@ import ProjectCard from './components/ProjectCard';
 import SearchBar from './components/SearchBar';
 import { Project, ProjectFormData } from './components/types';
 import ExcelJS from 'exceljs';
-import { saveAs } from 'file-saver';
 import { openDB } from 'idb';
 import { RxGear } from "react-icons/rx";
 import Settings from "./components/Settings";
-
+import { writeFile,BaseDirectory, exists} from '@tauri-apps/plugin-fs';
+import { save } from '@tauri-apps/plugin-dialog';
 const App: React.FC = () => {
   const [hoveredMilestone, setHoveredMilestone] = useState<string | null>(null);
   const [projects, setProjects] = useState<Project[]>([]);
@@ -19,7 +19,17 @@ const App: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [deleteModal, showDeleteModal] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-
+  async function getAvailableFilename(baseName: string, ext: string, dir: BaseDirectory): Promise<string> {
+    let index = 0;
+    let filename = `${baseName}.${ext}`;
+  
+    while (await exists(filename, { baseDir: dir })) {
+      index++;
+      filename = `${baseName}(${index}).${ext}`;
+    }
+  
+    return filename;
+  }
   const openSettings = () => {
       setIsSettingsOpen(true);
   };
@@ -162,29 +172,19 @@ const App: React.FC = () => {
     showDeleteModal(!deleteModal);
   };
 
-  // Export projects to Excel
   const exportToExcel = async () => {
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Projects');
-
+  
     // Add headers
     worksheet.addRow([
-      'ID',
-      'Name',
-      'Description',
-      'Progress',
-      'Priority',
-      'Days Left',
-      'Deadline',
-      'Category',
-      'Milestone 1 (20%)',
-      'Milestone 2 (40%)',
-      'Milestone 3 (60%)',
-      'Milestone 4 (80%)',
-      'Milestone 5 (100%)',
+      'ID', 'Name', 'Description', 'Progress', 'Priority', 'Days Left',
+      'Deadline', 'Category',
+      'Milestone 1 (20%)', 'Milestone 2 (40%)', 'Milestone 3 (60%)',
+      'Milestone 4 (80%)', 'Milestone 5 (100%)',
     ]);
-
-    // Add project data
+  
+    // Add data rows
     projects.forEach((project) => {
       worksheet.addRow([
         project.id,
@@ -195,109 +195,111 @@ const App: React.FC = () => {
         project.daysLeft,
         project.deadline,
         project.category,
-        ...project.milestones.map(
-          (milestone) =>
-            `${milestone.name}: ${milestone.descriptions} - ${milestone.completed ? 'Completed' : 'Not Completed'}`
+        ...project.milestones.map(m => 
+          `${m.name}: ${m.descriptions} - ${m.completed ? 'Completed' : 'Not Completed'}`
         ),
       ]);
     });
-
-    // Set column widths
-    worksheet.columns = [
-      { header: 'ID', key: 'id', width: 40 },
-      { header: 'Name', key: 'name', width: 25 },
-      { header: 'Description', key: 'description', width: 40 },
-      { header: 'Progress', key: 'progress', width: 15 },
-      { header: 'Priority', key: 'priority', width: 15 },
-      { header: 'Days Left', key: 'daysLeft', width: 15 },
-      {header: 'Deadline', key: 'deadline', width: 15},
-      { header: 'Category', key: 'category', width: 20 },
-      { header: 'Milestone 1 (20%)', key: 'milestones1', width: 50 },
-      { header: 'Milestone 2 (40%)', key: 'milestones2', width: 50 },
-      { header: 'Milestone 3 (60%)', key: 'milestones3', width: 50 },
-      { header: 'Milestone 4 (80%)', key: 'milestones4', width: 50 },
-      { header: 'Milestone 5 (100%)', key: 'milestones5', width: 50 },
-    ];
-
-    // Generate buffer
+  
+    // Generate Excel buffer
     const buffer = await workbook.xlsx.writeBuffer();
-  
-    // Save file
-    saveAs(new Blob([buffer]), 'projects.xlsx');
-  };
+    const data = new Uint8Array(buffer);
 
-  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = async (e) => {
-        const data = e.target?.result;
-        if (data) {
-          const workbook = new ExcelJS.Workbook();
-          await workbook.xlsx.load(data as ArrayBuffer);
+
+    // try{
+    //   const filename = await getAvailableFilename('projects', 'xlsx', BaseDirectory.Download);
+    //   await writeFile(filename, data, { baseDir: BaseDirectory.Download });
+      
+    //   // console.log(`✅ Saved as: ${filename}`);
+
+    // }
+    try {
+      const filename = await getAvailableFilename('projects', 'xlsx', BaseDirectory.Download);
+
+      // Show save dialog
+      const filePath = await save({
+        defaultPath: filename,
+        filters: [{ name: 'Excel Files', extensions: ['xlsx'] }],
+      });
   
-          const worksheet = workbook.getWorksheet(1); // Get the first worksheet
-  
-          // Check if the worksheet exists
-          if (!worksheet) {
-            console.error('No worksheet found in the Excel file.');
-            return;
-          }
-  
-          const importedProjects: Project[] = [];
-  
-          worksheet.eachRow((row, rowNumber) => {
-            if (rowNumber > 1) {
-              // Skip the header row
-              const project: Project = {
-                id: crypto.randomUUID(),
-                name: row.getCell(1).text, // Name
-                description: row.getCell(2).text, // Description
-                progress: parseInt(row.getCell(3).text, 10) || 0, // Progress (default to 0 if missing)
-                priority: (row.getCell(4).text as 'High' | 'Medium' | 'Low') || 'Medium', // Priority (default to 'Medium' if missing)
-                daysLeft: parseInt(row.getCell(5).text, 10) || 0, // Days Left (default to 0 if missing)
-                deadline: row.getCell(6).text || '',
-                category: row.getCell(7).text || '', // Category (default to empty string if missing)
-                tasks: { completed: 0, total: 0 }, // Default tasks
-                milestones: [
-                  parseMilestone(row.getCell(8).text, 20), // Milestone 1
-                  parseMilestone(row.getCell(9).text, 40), // Milestone 2
-                  parseMilestone(row.getCell(10).text, 60), // Milestone 3
-                  parseMilestone(row.getCell(11).text, 80), // Milestone 4
-                  parseMilestone(row.getCell(12).text, 100), // Milestone 5
-                ],
-              };
-  
-              // Add the project to the imported projects list
-              importedProjects.push(project);
-            }
-          });
-  
-          // Add imported projects to the existing projects
-                // Update state in one go
-        console.log('Imported Projects:', importedProjects);
-        setProjects((prevProjects) => {
-          const newProjects = [...prevProjects, ...importedProjects];
-          console.log('Updated Projects:', newProjects);
-          return newProjects;
-        });
-        }
-      };
-      reader.readAsArrayBuffer(file);
+      if (filePath) {
+        // Write binary file
+        await writeFile(filePath, data, { baseDir: BaseDirectory.Download });
+        
+        console.log("✅ File saved successfully:", filePath);
+        return true;
+      } else {
+        console.log("⚠️ Save operation canceled by user");
+        return false;
+      }
+    }
+     catch (error) {
+      console.error("❌ Error saving file:", error);
+      throw error;
     }
   };
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
   
-  // Helper function to parse milestone description and status
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      const data = e.target?.result;
+      if (!data) return;
+  
+      const workbook = new ExcelJS.Workbook();
+      await workbook.xlsx.load(data as ArrayBuffer);
+  
+      const worksheet = workbook.getWorksheet(1); // Get the first worksheet
+      if (!worksheet) {
+        console.error('No worksheet found in the Excel file.');
+        return;
+      }
+  
+      const importedProjects: Project[] = [];
+  
+      worksheet.eachRow((row, rowNumber) => {
+        // Row 1 is the header
+        if (rowNumber === 1) return;
+  
+        const project: Project = {
+          id: row.getCell(1).text || crypto.randomUUID(), // Use Excel UUID or fallback
+          name: row.getCell(2).text,
+          description: row.getCell(3).text,
+          progress: parseInt(row.getCell(4).text, 10) || 0,
+          priority: (row.getCell(5).text as 'High' | 'Medium' | 'Low') || 'Medium',
+          daysLeft: parseInt(row.getCell(6).text, 10) || 0,
+          deadline: row.getCell(7).text || '',
+          category: row.getCell(8).text || '',
+          tasks: { completed: 0, total: 0 }, // Static/default, or enhance if needed
+          milestones: [
+            parseMilestone(row.getCell(9).text, 20),
+            parseMilestone(row.getCell(10).text, 40),
+            parseMilestone(row.getCell(11).text, 60),
+            parseMilestone(row.getCell(12).text, 80),
+            parseMilestone(row.getCell(13).text, 100),
+          ],
+        };
+  
+        importedProjects.push(project);
+      });
+  
+      console.log('Imported Projects:', importedProjects);
+      setProjects((prev) => [...prev, ...importedProjects]);
+    };
+  
+    reader.readAsArrayBuffer(file);
+  };
+  
   const parseMilestone = (text: string, percent: number) => {
-    const [description, status] = text.split(' - '); // Split by ' - ' to separate description and status
+    const [description, status] = text.split(' - ');
     return {
       percent,
       name: `Milestone ${percent}%`,
-      descriptions: description?.trim() || '', // Handle undefined description
+      descriptions: description?.trim() || '',
       completed: status?.trim().toLowerCase() === 'completed',
     };
   };
-
   const filteredProjects = projects.filter(
     (project) =>
       project.name.toLowerCase().includes(searchTerm.toLowerCase()) ||

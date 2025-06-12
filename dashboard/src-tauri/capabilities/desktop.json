@@ -8,5 +8,19 @@
   "windows": [
     "main"
   ],
-  "permissions": []
+  "permissions": [
+    "core:default",
+    {
+      "identifier": "fs:write-files",
+      "allow": [
+        {
+          "path":"$DOWNLOAD" 
+        }
+      ]
+    },
+    "fs:write-files",
+    "fs:allow-exists",
+    "dialog:allow-open",
+    "dialog:allow-save"
+  ]
 }

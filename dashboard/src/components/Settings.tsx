@@ -162,8 +162,10 @@ const Settings: React.FC<SettingsProps> = ({ isOpen, onClose }) => {
     return (
                     <div className="fixed inset-0 backdrop-blur flex items-center justify-center z-50">
 
-            <div className="bg-white p-6 rounded-lg shadow-lg w-[600px] h-[400px] flex  dark:bg-gray-900">
-                {/* Sidebar */}
+
+<div className="bg-white p-6 rounded-lg w-[600px] h-[400px] flex dark:bg-gray-900 
+              border border-stone-200
+              shadow-[0_0_10px_2px_rgba(255,255,255,0.5)] dark:shadow-[0_0_15px_3px_rgba(255,255,255,0.3)]">                   {/* Sidebar */}
                 <div className="w-1/4 border-r border-gray-200 pr-4 dark:border-gray-50">
                     <h2 className="text-lg font-semibold mb-4">Settings</h2>
                     <ul className="space-y-2">
