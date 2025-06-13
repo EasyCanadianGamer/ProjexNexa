@@ -1,0 +1,54 @@
+name: Build macOS Artifacts
+
+on:
+  push:
+    tags:
+      - 'v*'  # Auto-build .app.tar.gz on tags
+  workflow_dispatch:  # Manual trigger for DMG
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: aarch64-apple-darwin  # For Apple Silicon
+          profile: minimal
+
+      - name: Install dependencies
+        run: |
+          npm install
+          npm install @tauri-apps/cli
+
+      - name: Build Application Bundle (.app)
+        if: github.event_name == 'push'
+        run: npx tauri build --bundles app
+
+      - name: Build DMG Package
+        if: github.event_name == 'workflow_dispatch'
+        run: npx tauri build --bundles dmg
+
+      - name: Package .app for Homebrew
+        if: github.event_name == 'push'
+        run: |
+          cd src-tauri/target/release/bundle/macos
+          tar -czf ProjexNexa.app.tar.gz ProjexNexa.app
+          echo "APP_TAR_PATH=$(pwd)/ProjexNexa.app.tar.gz" >> $GITHUB_ENV
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: macos-artifacts
+          path: |
+            src-tauri/target/release/bundle/macos/ProjexNexa.app.tar.gz
+            src-tauri/target/release/bundle/dmg/ProjexNexa_*.dmg
