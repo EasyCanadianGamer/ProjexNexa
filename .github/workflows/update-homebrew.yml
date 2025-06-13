@@ -3,7 +3,9 @@ name: Update Homebrew Formula
 on:
   release:
     types: [published]
-
+    
+permissions:
+  contents: write  # Required to push to the repository
 jobs:
   update-homebrew:
     runs-on: ubuntu-latest
@@ -12,9 +14,9 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: EasyCanadianGamer/homebrew-projexnexa
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PAT}}
           path: homebrew-tap
-
+ 
       - name: Get .app.tar.gz Info
         id: release
         run: |
