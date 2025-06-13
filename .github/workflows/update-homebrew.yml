@@ -3,7 +3,7 @@ name: Update Homebrew Formulas
 on:
   release:
     types: [published]
-    
+  workflow_dispatch:
 permissions:
   contents: write  # Required to push to the repository
 jobs:
