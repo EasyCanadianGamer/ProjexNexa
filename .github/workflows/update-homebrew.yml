@@ -8,7 +8,6 @@ jobs:
   update-homebrew:
     runs-on: ubuntu-latest
     steps:
-      # Step 1: Checkout Homebrew tap
       - name: Checkout Homebrew Tap
         uses: actions/checkout@v4
         with:
@@ -16,38 +15,31 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           path: homebrew-tap
 
-      # Step 2: Find the macOS binary URL and SHA256
-      - name: Get Binary Info
+      - name: Get .app.tar.gz Info
         id: release
         run: |
-          # Replace 'ProjexNexa.app.tar.gz' with your actual release asset name
-          ASSET_URL=$(curl -s https://api.github.com/repos/EasyCanadianGamer/ProjexNexa/releases/latest | jq -r '.assets[] | select(.name | contains("mac")) | .browser_download_url')
+          ASSET_URL=$(curl -s https://api.github.com/repos/EasyCanadianGamer/ProjexNexa/releases/latest | 
+                    jq -r '.assets[] | select(.name | endswith("app.tar.gz")) | .browser_download_url')
           SHA=$(curl -sL "$ASSET_URL" | sha256sum | cut -d ' ' -f 1)
           echo "url=${ASSET_URL}" >> $GITHUB_OUTPUT
           echo "sha256=${SHA}" >> $GITHUB_OUTPUT
 
-      # Step 3: Generate the Formula
       - name: Update Formula
         run: |
           cd homebrew-tap
-          mkdir -p Formula
           cat > Formula/projexnexa.rb << EOF
           class ProjexNexa < Formula
-            desc "Your Tauri app description"
+            desc "Tauri application for project management"
             homepage "https://github.com/EasyCanadianGamer/ProjexNexa"
             url "${{ steps.release.outputs.url }}"
             sha256 "${{ steps.release.outputs.sha256 }}"
             license "MIT"
 
-            depends_on macos: :monterey  # Adjust macOS version as needed
+            depends_on macos: :monterey
 
             def install
-              # For .app bundles:
               prefix.install "ProjexNexa.app"
               bin.write_exec_script prefix/"ProjexNexa.app/Contents/MacOS/ProjexNexa"
-              
-              # For raw binaries (if not .app):
-              # bin.install "projexnexa"
             end
 
             test do
@@ -56,7 +48,6 @@ jobs:
           end
           EOF
 
-      # Step 4: Commit and push
       - name: Commit and Push
         run: |
           cd homebrew-tap
