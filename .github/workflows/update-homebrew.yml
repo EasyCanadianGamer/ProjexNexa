@@ -29,6 +29,9 @@ jobs:
       - name: Update Formula
         run: |
           cd homebrew-tap
+          git remote -v
+          echo "PAT EXISTS: ${{ secrets.PAT_TOKEN != '' }}"
+          env | grep GITHUB
           cat > Formula/projexnexa.rb << EOF
           class ProjexNexa < Formula
             desc "Tauri application for project management"
