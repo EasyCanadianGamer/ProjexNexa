@@ -3,8 +3,8 @@ name: Build and Release macOS Artifacts
 on:
   push:
     tags:
-      - 'v*'  # Auto-trigger on version tags
-  workflow_dispatch:  # Manual trigger option
+      - 'v*'
+  workflow_dispatch:
 
 jobs:
   build-and-release:
@@ -13,7 +13,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Needed for tags
+          fetch-depth: 0
 
       - name: Get version from tag
         id: get-version
@@ -26,6 +26,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: 'dashboard/package-lock.json'
 
       - name: Install Rust
         uses: actions-rs/toolchain@v1
@@ -35,24 +37,22 @@ jobs:
           profile: minimal
 
       - name: Install dependencies
-        working-directory: ./dashboard  # Changed from projexnexa/dashboard
-        run: |
-          npm install
-          npm install @tauri-apps/cli
+        working-directory: ./dashboard
+        run: npm ci
 
       - name: Build both app and dmg
-        working-directory: ./dashboard  # Changed from projexnexa/dashboard
+        working-directory: ./dashboard
         run: npx tauri build --bundles app,dmg
 
       - name: Package .app for Homebrew
-        working-directory: ./dashboard  # Changed from projexnexa/dashboard
+        working-directory: ./dashboard
         run: |
           cd src-tauri/target/release/bundle/macos
           tar -czf ProjexNexa.app.tar.gz ProjexNexa.app
           echo "APP_TAR_PATH=$(pwd)/ProjexNexa.app.tar.gz" >> $GITHUB_ENV
 
       - name: Find DMG artifact
-        working-directory: ./dashboard  # Changed from projexnexa/dashboard
+        working-directory: ./dashboard
         id: find-dmg
         run: |
           DMG_PATH=$(ls src-tauri/target/release/bundle/dmg/*.dmg)
