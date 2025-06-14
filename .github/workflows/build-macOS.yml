@@ -10,26 +10,18 @@ jobs:
   build-and-release:
     runs-on: macos-latest
     permissions:
-      contents: write  # Required for release creation
-      packages: read   # For publishing if needed
+      contents: write
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Verify folder structure
-        run: |
-          ls -la
-          ls -la dashboard
-          echo "Package.json exists:" $(test -f dashboard/package.json && echo "Yes" || echo "No")
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
-          cache-dependency-path: 'dashboard/package-lock.json'
 
       - name: Install Rust
         uses: actions-rs/toolchain@v1
@@ -38,17 +30,11 @@ jobs:
           target: aarch64-apple-darwin
           profile: minimal
 
-      - name: Install project dependencies
+      - name: Install dependencies
         working-directory: ./dashboard
         run: |
-          echo "Current directory: $(pwd)"
-          echo "Contents:"
-          ls -la
           npm ci
-
-      - name: Install Tauri CLI
-        working-directory: ./dashboard
-        run: npm install @tauri-apps/cli
+          npm install @tauri-apps/cli
 
       - name: Build both app and dmg
         working-directory: ./dashboard
@@ -69,7 +55,7 @@ jobs:
           echo "dmg_path=$DMG_PATH" >> $GITHUB_OUTPUT
           echo "dmg_name=$(basename $DMG_PATH)" >> $GITHUB_OUTPUT
 
-      - name: Create Release
+      - name: Create Release with Assets
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -85,23 +71,3 @@ jobs:
             ${{ steps.find-dmg.outputs.dmg_path }}
           draft: false
           prerelease: false
-
-      - name: Upload App Tarball
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create-release.outputs.upload_url }}
-          asset_path: ${{ env.APP_TAR_PATH }}
-          asset_name: ProjexNexa.app.tar.gz
-          asset_content_type: application/gzip
-
-      - name: Upload DMG
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create-release.outputs.upload_url }}
-          asset_path: ${{ steps.find-dmg.outputs.dmg_path }}
-          asset_name: ${{ steps.find-dmg.outputs.dmg_name }}
-          asset_content_type: application/octet-stream
