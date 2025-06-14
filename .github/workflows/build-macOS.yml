@@ -35,20 +35,24 @@ jobs:
           profile: minimal
 
       - name: Install dependencies
+        working-directory: ./dashboard  # Changed from projexnexa/dashboard
         run: |
           npm install
           npm install @tauri-apps/cli
 
       - name: Build both app and dmg
+        working-directory: ./dashboard  # Changed from projexnexa/dashboard
         run: npx tauri build --bundles app,dmg
 
       - name: Package .app for Homebrew
+        working-directory: ./dashboard  # Changed from projexnexa/dashboard
         run: |
           cd src-tauri/target/release/bundle/macos
           tar -czf ProjexNexa.app.tar.gz ProjexNexa.app
           echo "APP_TAR_PATH=$(pwd)/ProjexNexa.app.tar.gz" >> $GITHUB_ENV
 
       - name: Find DMG artifact
+        working-directory: ./dashboard  # Changed from projexnexa/dashboard
         id: find-dmg
         run: |
           DMG_PATH=$(ls src-tauri/target/release/bundle/dmg/*.dmg)
