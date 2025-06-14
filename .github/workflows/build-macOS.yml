@@ -22,6 +22,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: 'dashboard/package-lock.json'
 
       - name: Install Rust
         uses: actions-rs/toolchain@v1
@@ -40,6 +42,15 @@ jobs:
         working-directory: ./dashboard
         run: npx tauri build --bundles app,dmg
 
+      - name: Verify DMG exists
+        working-directory: ./dashboard
+        run: |
+          ls -la src-tauri/target/release/bundle/dmg/
+          if [ ! -f "src-tauri/target/release/bundle/dmg/"*.dmg ]; then
+            echo "::error::No DMG file found!"
+            exit 1
+          fi
+
       - name: Package .app for Homebrew
         working-directory: ./dashboard
         run: |
@@ -47,13 +58,13 @@ jobs:
           tar -czf ProjexNexa.app.tar.gz ProjexNexa.app
           echo "APP_TAR_PATH=$(pwd)/ProjexNexa.app.tar.gz" >> $GITHUB_ENV
 
-      - name: Find DMG artifact
+      - name: Get DMG path
         working-directory: ./dashboard
-        id: find-dmg
+        id: dmg
         run: |
-          DMG_PATH=$(ls src-tauri/target/release/bundle/dmg/*.dmg)
-          echo "dmg_path=$DMG_PATH" >> $GITHUB_OUTPUT
-          echo "dmg_name=$(basename $DMG_PATH)" >> $GITHUB_OUTPUT
+          DMG_FILE=$(ls src-tauri/target/release/bundle/dmg/*.dmg)
+          echo "DMG_PATH=$(pwd)/$DMG_FILE" >> $GITHUB_OUTPUT
+          echo "DMG_NAME=$(basename "$DMG_FILE")" >> $GITHUB_OUTPUT
 
       - name: Create Release with Assets
         uses: softprops/action-gh-release@v1
@@ -68,6 +79,6 @@ jobs:
             - **Manual Install**: Use the `.dmg` file
           files: |
             ${{ env.APP_TAR_PATH }}
-            ${{ steps.find-dmg.outputs.dmg_path }}
+            ${{ steps.dmg.outputs.DMG_PATH }}
           draft: false
           prerelease: false
