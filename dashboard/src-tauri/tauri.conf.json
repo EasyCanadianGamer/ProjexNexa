@@ -2,7 +2,7 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
   "productName": "ProjexNexa",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "identifier": "com.CanadianGamer.ProjexNexa",
   "build": {
     "frontendDist": "../dist",
@@ -30,11 +30,9 @@
     "active": true,
     "targets": "all",
     "icon": [
-      "icons/32x32.png",
-      "icons/128x128.png",
-      "icons/128x128@2x.png",
-      "icons/icon.icns",
-      "icons/icon.ico"
+      "icons/PN.png",
+      "icons/PN.icns",
+      "icons/PN.ico"
     ],
     "linux": {
       "appimage": {
@@ -52,6 +50,7 @@
     },
     "macOS": {
     "dmg": {
+      "background": "./images/bg.png",
       "appPosition": {
         "x": 180,
         "y": 170
@@ -61,8 +60,8 @@
         "y": 170
       },
       "windowSize": {
-        "height": 400,
-        "width": 660
+        "height": 600,
+        "width": 860
       }
     },
     "files": {},
