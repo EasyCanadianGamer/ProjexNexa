@@ -9,6 +9,9 @@ on:
 jobs:
   build-and-release:
     runs-on: macos-latest
+    permissions:
+      contents: write  # Required for release creation
+      packages: read   # For publishing if needed
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -67,17 +70,19 @@ jobs:
           echo "dmg_name=$(basename $DMG_PATH)" >> $GITHUB_OUTPUT
 
       - name: Create Release
-        id: create-release
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref_name }}  # Changed from steps.get-version.outputs.tag
-          release_name: "ProjexNexa ${{ steps.get-version.outputs.version }}"
+          tag_name: ${{ github.ref_name }}
+          name: "ProjexNexa ${{ github.ref_name }}"
           body: |
             ### macOS Release
             - **Homebrew**: Use the `.app.tar.gz` for formula updates
             - **Manual Install**: Use the `.dmg` file
+          files: |
+            ${{ env.APP_TAR_PATH }}
+            ${{ steps.find-dmg.outputs.dmg_path }}
           draft: false
           prerelease: false
 
