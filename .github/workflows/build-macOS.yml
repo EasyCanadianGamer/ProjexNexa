@@ -15,12 +15,11 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Get version from tag
-        id: get-version
+      - name: Verify folder structure
         run: |
-          TAG_VERSION=${GITHUB_REF#refs/tags/}
-          echo "version=${TAG_VERSION/v/}" >> $GITHUB_OUTPUT
-          echo "tag=$TAG_VERSION" >> $GITHUB_OUTPUT
+          ls -la
+          ls -la dashboard
+          echo "Package.json exists:" $(test -f dashboard/package.json && echo "Yes" || echo "No")
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -36,9 +35,17 @@ jobs:
           target: aarch64-apple-darwin
           profile: minimal
 
-      - name: Install dependencies
+      - name: Install project dependencies
         working-directory: ./dashboard
-        run: npm ci
+        run: |
+          echo "Current directory: $(pwd)"
+          echo "Contents:"
+          ls -la
+          npm ci
+
+      - name: Install Tauri CLI
+        working-directory: ./dashboard
+        run: npm install @tauri-apps/cli
 
       - name: Build both app and dmg
         working-directory: ./dashboard
