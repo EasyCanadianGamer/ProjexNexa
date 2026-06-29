@@ -1,0 +1,23 @@
+{
+  "version": "0.1.7",
+  "notes": "Linux support + Auto Updates",
+  "pub_date": "2026-06-28T00:00:00Z",
+  "platforms": {
+    "linux-x86_64": {
+      "url": "https://github.com/EasyCanadianGamer/ProjexNexa/releases/download/v0.1.7/ProjexNexa_0.1.7_amd64.AppImage.tar.gz",
+      "signature": ""
+    },
+    "darwin-aarch64": {
+      "url": "https://github.com/EasyCanadianGamer/ProjexNexa/releases/download/v0.1.7/ProjexNexa.app.tar.gz",
+      "signature": ""
+    },
+    "darwin-x86_64": {
+      "url": "https://github.com/EasyCanadianGamer/ProjexNexa/releases/download/v0.1.7/ProjexNexa.app.tar.gz",
+      "signature": ""
+    },
+    "windows-x86_64": {
+      "url": "https://github.com/EasyCanadianGamer/ProjexNexa/releases/download/v0.1.7/ProjexNexa_0.1.7_x64-setup.exe",
+      "signature": ""
+    }
+  }
+}

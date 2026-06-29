@@ -40,6 +40,9 @@ jobs:
 
       - name: Build both app and dmg
         working-directory: ./dashboard
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          # TAURI_SIGNING_PRIVATE_KEY_PASSWORD not needed — key was generated without passphrase
         run: npx tauri build --bundles app,dmg
 
       - name: Verify DMG exists
@@ -55,8 +58,18 @@ jobs:
         working-directory: ./dashboard
         run: |
           cd src-tauri/target/release/bundle/macos
-          tar -czf ProjexNexa.app.tar.gz ProjexNexa.app
-          echo "APP_TAR_PATH=$(pwd)/ProjexNexa.app.tar.gz" >> $GITHUB_ENV
+          tar -czf ProjexNexa-homebrew.app.tar.gz ProjexNexa.app
+          echo "APP_TAR_PATH=$(pwd)/ProjexNexa-homebrew.app.tar.gz" >> $GITHUB_ENV
+
+      - name: Upload signature to Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref_name }}
+          files: |
+            dashboard/src-tauri/target/release/bundle/macos/*.app.tar.gz.sig
 
       - name: Get DMG path
         working-directory: ./dashboard
@@ -67,6 +80,7 @@ jobs:
           echo "DMG_NAME=$(basename "$DMG_FILE")" >> $GITHUB_OUTPUT
 
       - name: Create Release with Assets
+        if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -79,6 +93,7 @@ jobs:
             - **Manual Install**: Use the `.dmg` file
           files: |
             ${{ env.APP_TAR_PATH }}
+            dashboard/src-tauri/target/release/bundle/macos/ProjexNexa.app.tar.gz
             ${{ steps.dmg.outputs.DMG_PATH }}
           draft: false
           prerelease: false
