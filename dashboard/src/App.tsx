@@ -11,6 +11,7 @@ import { RxGear } from "react-icons/rx";
 import Settings from "./components/Settings";
 import { writeFile,BaseDirectory, exists} from '@tauri-apps/plugin-fs';
 import { save } from '@tauri-apps/plugin-dialog';
+import { invoke } from '@tauri-apps/api/core';
 const App: React.FC = () => {
   const [hoveredMilestone, setHoveredMilestone] = useState<string | null>(null);
   const [projects, setProjects] = useState<Project[]>([]);
@@ -19,6 +20,8 @@ const App: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [deleteModal, showDeleteModal] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [updateInfo, setUpdateInfo] = useState<{ available: boolean; version: string } | null>(null);
+  const [updateDismissed, setUpdateDismissed] = useState(false);
   async function getAvailableFilename(baseName: string, ext: string, dir: BaseDirectory): Promise<string> {
     let index = 0;
     let filename = `${baseName}.${ext}`;
@@ -104,9 +107,16 @@ const App: React.FC = () => {
     const timeoutId = setTimeout(() => {
       saveProjects(projects);
     }, 100); // Delay saving by 100ms
-  
+
     return () => clearTimeout(timeoutId);
   }, [projects]);
+
+  // Check for updates on startup
+  useEffect(() => {
+    invoke<{ available: boolean; version: string }>('check_for_updates')
+      .then(result => { if (result.available) setUpdateInfo(result); })
+      .catch(() => {}); // silently fail — no network is normal in offline use
+  }, []);
 
   const initialFormData: ProjectFormData = {
     name: '',
@@ -308,7 +318,28 @@ const App: React.FC = () => {
   );
 
   return (
-<main id='main' >
+<main id='main'>
+  {updateInfo && !updateDismissed && (
+    <div className="bg-blue-600 text-white px-4 py-3 flex justify-between items-center">
+      <span className="text-sm font-medium">
+        ProjexNexa v{updateInfo.version} is available
+      </span>
+      <div className="flex gap-2">
+        <button
+          onClick={() => invoke('install_update')}
+          className="px-3 py-1 bg-white text-blue-600 rounded text-sm font-semibold hover:bg-blue-50"
+        >
+          Update Now
+        </button>
+        <button
+          onClick={() => setUpdateDismissed(true)}
+          className="px-3 py-1 border border-white text-white rounded text-sm hover:bg-blue-700"
+        >
+          Dismiss
+        </button>
+      </div>
+    </div>
+  )}
 <div className="min-h-screen bg-gray-50 dark:bg-gray-900 dark:text-white p-8">
       <div className="max-w-full mx-auto">
         {/* Header */}

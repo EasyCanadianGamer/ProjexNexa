@@ -3,7 +3,7 @@ import { Edit2, X, CheckCircle2, Clock } from 'lucide-react';
 import { Project } from './types';
 import ProgressBar from './ProgressBar';
 import ProjectDelete from './ProjectDelete'
-import { getPriorityColor } from './util'; // Import the utility function
+import { getPriorityColor, getDeadlineDisplay } from './util'; // Import the utility function
 
 type ProjectCardProps = {
   project: Project;
@@ -91,13 +91,16 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           </div>
         </div>
 
-        <div className="bg-orange-50 rounded-lg p-3 flex items-center space-x-3 dark:bg-orange-200 ">
+        <div className="bg-orange-50 rounded-lg p-3 flex items-center space-x-3 dark:bg-orange-200">
           <div className="bg-orange-100 p-2 rounded-lg dark:bg-orange-300">
             <Clock className="h-5 w-5 text-orange-600" />
           </div>
           <div>
-            <p className="text-xs text-gray-600">Days Left</p>
-            <p className="text-sm font-semibold text-gray-900 dark:text-gray-1000">{project.daysLeft}</p>
+            <p className="text-xs text-gray-600">Deadline</p>
+            {(() => {
+              const { text, className } = getDeadlineDisplay(project.deadline, project.daysLeft);
+              return <p className={`text-sm font-semibold ${className}`}>{text}</p>;
+            })()}
           </div>
         </div>
       </div>
