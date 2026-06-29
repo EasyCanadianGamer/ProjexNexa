@@ -17,12 +17,13 @@ If you feel comfortable in writing code using Typescript and Rust, we highly enc
 
 * [x] Add settings
   * [X] change modes ( Light, Dark, and System Prefrence)
-  * [x] Add a About sectio
+  * [x] Add a About section
 * [ ] Auto Updates
 * [ ] Change the days left to allow to use dates instead
-* [ ] Have it support MacOS and Linux
+* [ ] Have it support MacOS, Linux, and Windows
   * [X] MacOS
   * [x] Linux
+  * [ ] Windows
 
 Recommend us a feature by opening an [discussions](https://github.com/EasyCanadianGamer/ProjexNexa/discussions) if you'd like to.
 
