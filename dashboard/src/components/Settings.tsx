@@ -15,6 +15,8 @@ const Settings: React.FC<SettingsProps> = ({ isOpen, onClose }) => {
     const [theme, setTheme] = useState<string>(
         localStorage.getItem("theme") || "system"
     );
+    const [isCheckingUpdate, setIsCheckingUpdate] = useState(false);
+    const [updateStatus, setUpdateStatus] = useState<{ available: boolean; version: string } | null>(null);
 
 
     useEffect(() => {
@@ -43,6 +45,19 @@ const Settings: React.FC<SettingsProps> = ({ isOpen, onClose }) => {
         }
     };
 
+
+    const handleCheckForUpdates = async () => {
+        setIsCheckingUpdate(true);
+        setUpdateStatus(null);
+        try {
+            const result = await invoke<{ available: boolean; version: string }>('check_for_updates');
+            setUpdateStatus(result);
+        } catch {
+            setUpdateStatus({ available: false, version: '' });
+        } finally {
+            setIsCheckingUpdate(false);
+        }
+    };
 
     useEffect(() => {
         const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
@@ -91,7 +106,36 @@ const Settings: React.FC<SettingsProps> = ({ isOpen, onClose }) => {
                 </div>
                 );
             case 'updates':
-                return <div>Updates settings content goes here.</div>;
+                return (
+                    <div className="space-y-4 dark:text-white">
+                        <h2 className="text-xl font-bold">Updates</h2>
+                        <p className="text-sm text-gray-600 dark:text-gray-300">
+                            Current version: <strong>{appVersion}</strong>
+                        </p>
+                        <div className="flex items-center gap-3 flex-wrap">
+                            <button
+                                onClick={handleCheckForUpdates}
+                                disabled={isCheckingUpdate}
+                                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 cursor-pointer dark:bg-blue-400 dark:hover:bg-blue-500"
+                            >
+                                {isCheckingUpdate ? 'Checking...' : 'Check for Updates'}
+                            </button>
+                            {updateStatus && (
+                                <span className={updateStatus.available ? 'text-green-600 font-medium' : 'text-gray-500 dark:text-gray-300'}>
+                                    {updateStatus.available ? `v${updateStatus.version} available` : 'Up to date'}
+                                </span>
+                            )}
+                        </div>
+                        {updateStatus?.available && (
+                            <button
+                                onClick={() => invoke('install_update')}
+                                className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 cursor-pointer dark:bg-green-400 dark:hover:bg-green-500"
+                            >
+                                Install v{updateStatus.version}
+                            </button>
+                        )}
+                    </div>
+                );
             case 'about':
                 return (
                     <div className="space-y-4 overflow-y-auto max-h-[300px] pr-4 dark:text-white">
