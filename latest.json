@@ -9,11 +9,11 @@
     },
     "darwin-aarch64": {
       "url": "https://github.com/EasyCanadianGamer/ProjexNexa/releases/download/v0.1.7/ProjexNexa.app.tar.gz",
-      "signature": ""
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSVk1aSkpoMmx0N3pOQ2RDblBKYTRLMFMxK00yekdBSDVtdVJuVHN4ZklicVVmVHJkS2dqcUg5a2kzVEZhTmVJT2RWOEF3YVJnZUFqK2tJRjdnZHRyZVhDWmtVNVBwWUFJPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzgyNzM0MjYwCWZpbGU6UHJvamV4TmV4YS5hcHAudGFyLmd6CjRESlo1bythSEdzeFdrdUtPd1hHTjRFZlRDYnl3MW5TdFZkdEZvMFdhaEVSTUlYdDZqN3l1Y3pMSHhJM3lYSGk3N3cvVjFvZWY5WmREN3VGcTRFTERBPT0K"
     },
     "darwin-x86_64": {
       "url": "https://github.com/EasyCanadianGamer/ProjexNexa/releases/download/v0.1.7/ProjexNexa.app.tar.gz",
-      "signature": ""
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSVk1aSkpoMmx0N3pOQ2RDblBKYTRLMFMxK00yekdBSDVtdVJuVHN4ZklicVVmVHJkS2dqcUg5a2kzVEZhTmVJT2RWOEF3YVJnZUFqK2tJRjdnZHRyZVhDWmtVNVBwWUFJPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzgyNzM0MjYwCWZpbGU6UHJvamV4TmV4YS5hcHAudGFyLmd6CjRESlo1bythSEdzeFdrdUtPd1hHTjRFZlRDYnl3MW5TdFZkdEZvMFdhaEVSTUlYdDZqN3l1Y3pMSHhJM3lYSGk3N3cvVjFvZWY5WmREN3VGcTRFTERBPT0K"
     },
     "windows-x86_64": {
       "url": "https://github.com/EasyCanadianGamer/ProjexNexa/releases/download/v0.1.7/ProjexNexa_0.1.7_x64-setup.exe",

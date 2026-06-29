@@ -25,7 +25,7 @@ jobs:
         run: |
           ASSET_URL=$(curl -sLH "Authorization: token ${{ secrets.PAT_TOKEN }}" \
             "https://api.github.com/repos/EasyCanadianGamer/ProjexNexa/releases/latest" \
-            | jq -r '.assets[] | select(.name | endswith("app.tar.gz")) | .browser_download_url')
+            | jq -r '.assets[] | select(.name == "ProjexNexa-homebrew.app.tar.gz") | .browser_download_url')
           SHA=$(curl -sL "$ASSET_URL" | sha256sum | cut -d ' ' -f 1)
           echo "url=${ASSET_URL}" >> $GITHUB_OUTPUT
           echo "sha256=${SHA}" >> $GITHUB_OUTPUT
@@ -73,10 +73,12 @@ jobs:
           EOF
 
       - name: Commit and Push Changes
+        env:
+          TAG_NAME: ${{ github.event.release.tag_name }}
         run: |
           cd homebrew-tap
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
           git add Formula/projexnexa.rb
-          git commit -m "Update projexnexa to ${{ github.event.release.tag_name }} [skip ci]"
+          git commit -m "Update projexnexa to ${TAG_NAME} [skip ci]"
           git push "https://${{ secrets.PAT_TOKEN }}@github.com/EasyCanadianGamer/homebrew-projexnexa.git" HEAD:main
