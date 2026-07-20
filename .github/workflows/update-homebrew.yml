@@ -17,13 +17,14 @@ jobs:
         with:
           repository: EasyCanadianGamer/homebrew-projexnexa
           token: ${{ secrets.PAT_TOKEN }}
+          ref: main
           path: homebrew-tap
           fetch-depth: 0  # Required for proper git history
 
       - name: Get Release Info
         id: release
         run: |
-          ASSET_URL=$(curl -sLH "Authorization: token ${{ secrets.PAT_TOKEN }}" \
+          ASSET_URL=$(curl -fsSL -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             "https://api.github.com/repos/EasyCanadianGamer/ProjexNexa/releases/latest" \
             | jq -r '.assets[] | select(.name == "ProjexNexa-homebrew.app.tar.gz") | .browser_download_url')
           SHA=$(curl -sL "$ASSET_URL" | sha256sum | cut -d ' ' -f 1)
