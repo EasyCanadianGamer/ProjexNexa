@@ -81,5 +81,9 @@ jobs:
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
           git add Formula/projexnexa.rb
-          git commit -m "Update projexnexa to ${TAG_NAME} [skip ci]"
-          git push "https://${{ secrets.PAT_TOKEN }}@github.com/EasyCanadianGamer/homebrew-projexnexa.git" HEAD:main
+          if git diff --staged --quiet; then
+            echo "Formula already up to date, nothing to commit."
+          else
+            git commit -m "Update projexnexa to ${TAG_NAME} [skip ci]"
+            git push "https://${{ secrets.PAT_TOKEN }}@github.com/EasyCanadianGamer/homebrew-projexnexa.git" HEAD:main
+          fi
