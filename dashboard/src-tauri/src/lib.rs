@@ -1,21 +1,11 @@
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 use serde_json::Value;
-use std::fs;
 use tauri_plugin_updater::UpdaterExt;
 
 #[tauri::command]
-fn get_app_info() -> Result<(String, String), String> {
-    let config = fs::read_to_string("tauri.conf.json").map_err(|e| e.to_string())?;
-    let config: Value = serde_json::from_str(&config).map_err(|e| e.to_string())?;
-    let app_name = config["productName"]
-        .as_str()
-        .ok_or("productName not found in tauri.conf.json")?
-        .to_string();
-    let app_version = config["version"]
-        .as_str()
-        .ok_or("version not found in tauri.conf.json")?
-        .to_string();
-    Ok((app_name, app_version))
+fn get_app_info(app: tauri::AppHandle) -> Result<(String, String), String> {
+    let info = app.package_info();
+    Ok((info.name.clone(), info.version.to_string()))
 }
 
 #[tauri::command]
