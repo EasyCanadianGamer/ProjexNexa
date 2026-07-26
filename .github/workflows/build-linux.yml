@@ -5,6 +5,10 @@ on:
     tags:
       - 'v*'
   workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag to attach rebuilt assets to (e.g. v0.1.81). Defaults to the ref this workflow is run against.'
+        required: false
 
 jobs:
   build-and-release:
@@ -56,13 +60,13 @@ jobs:
         run: npx tauri build --bundles appimage,deb,rpm
 
       - name: Upload to GitHub Release
-        if: startsWith(github.ref, 'refs/tags/')
+        if: startsWith(github.ref, 'refs/tags/') || inputs.tag != ''
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref_name }}
-          name: "ProjexNexa ${{ github.ref_name }}"
+          tag_name: ${{ inputs.tag || github.ref_name }}
+          name: "ProjexNexa ${{ inputs.tag || github.ref_name }}"
           body: |
             ### Linux Release
             - **AppImage**: Universal, runs on any distro (recommended for Arch)
