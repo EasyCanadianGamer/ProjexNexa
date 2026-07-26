@@ -70,8 +70,7 @@ jobs:
             - **.rpm**: RHEL / Fedora
           files: |
             dashboard/src-tauri/target/release/bundle/appimage/*.AppImage
-            dashboard/src-tauri/target/release/bundle/appimage/*.AppImage.tar.gz
-            dashboard/src-tauri/target/release/bundle/appimage/*.AppImage.tar.gz.sig
+            dashboard/src-tauri/target/release/bundle/appimage/*.AppImage.sig
             dashboard/src-tauri/target/release/bundle/deb/*.deb
             dashboard/src-tauri/target/release/bundle/rpm/*.rpm
           draft: false

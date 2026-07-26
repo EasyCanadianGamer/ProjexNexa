@@ -24,12 +24,16 @@ jobs:
       - name: Get Release Info
         id: release
         run: |
-          ASSET_URL=$(curl -fsSL -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            "https://api.github.com/repos/EasyCanadianGamer/ProjexNexa/releases/latest" \
-            | jq -r '.assets[] | select(.name == "ProjexNexa-homebrew.app.tar.gz") | .browser_download_url')
+          RELEASE_JSON=$(curl -fsSL -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/EasyCanadianGamer/ProjexNexa/releases/latest")
+          ASSET_URL=$(echo "$RELEASE_JSON" | jq -r '.assets[] | select(.name == "ProjexNexa-homebrew.app.tar.gz") | .browser_download_url')
+          TAG_NAME=$(echo "$RELEASE_JSON" | jq -r '.tag_name')
+          VERSION="${TAG_NAME#v}"
           SHA=$(curl -sL "$ASSET_URL" | sha256sum | cut -d ' ' -f 1)
           echo "url=${ASSET_URL}" >> $GITHUB_OUTPUT
           echo "sha256=${SHA}" >> $GITHUB_OUTPUT
+          echo "tag=${TAG_NAME}" >> $GITHUB_OUTPUT
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
 
       - name: Update Formula
         run: |
@@ -39,6 +43,7 @@ jobs:
             desc "Tauri application for project management"
             homepage "https://github.com/EasyCanadianGamer/ProjexNexa"
             url "${{ steps.release.outputs.url }}"
+            version "${{ steps.release.outputs.version }}"
             sha256 "${{ steps.release.outputs.sha256 }}"
             license "MIT"
 
@@ -75,7 +80,7 @@ jobs:
 
       - name: Commit and Push Changes
         env:
-          TAG_NAME: ${{ github.event.release.tag_name }}
+          TAG_NAME: ${{ steps.release.outputs.tag }}
         run: |
           cd homebrew-tap
           git config --global user.name "GitHub Actions"

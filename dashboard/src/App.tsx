@@ -22,6 +22,18 @@ const App: React.FC = () => {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [updateInfo, setUpdateInfo] = useState<{ available: boolean; version: string } | null>(null);
   const [updateDismissed, setUpdateDismissed] = useState(false);
+  const [updateError, setUpdateError] = useState<string | null>(null);
+  const [isInstallingUpdate, setIsInstallingUpdate] = useState(false);
+
+  const handleInstallUpdate = () => {
+    setUpdateError(null);
+    setIsInstallingUpdate(true);
+    invoke('install_update')
+      .catch((err) => {
+        setUpdateError(typeof err === 'string' ? err : 'Failed to install update.');
+      })
+      .finally(() => setIsInstallingUpdate(false));
+  };
   async function getAvailableFilename(baseName: string, ext: string, dir: BaseDirectory): Promise<string> {
     let index = 0;
     let filename = `${baseName}.${ext}`;
@@ -320,24 +332,32 @@ const App: React.FC = () => {
   return (
 <main id='main'>
   {updateInfo && !updateDismissed && (
-    <div className="bg-blue-600 text-white px-4 py-3 flex justify-between items-center">
-      <span className="text-sm font-medium">
-        ProjexNexa v{updateInfo.version} is available
-      </span>
-      <div className="flex gap-2">
-        <button
-          onClick={() => invoke('install_update')}
-          className="px-3 py-1 bg-white text-blue-600 rounded text-sm font-semibold hover:bg-blue-50"
-        >
-          Update Now
-        </button>
-        <button
-          onClick={() => setUpdateDismissed(true)}
-          className="px-3 py-1 border border-white text-white rounded text-sm hover:bg-blue-700"
-        >
-          Dismiss
-        </button>
+    <div className="bg-blue-600 text-white px-4 py-3 flex flex-col gap-1">
+      <div className="flex justify-between items-center">
+        <span className="text-sm font-medium">
+          ProjexNexa v{updateInfo.version} is available
+        </span>
+        <div className="flex gap-2">
+          <button
+            onClick={handleInstallUpdate}
+            disabled={isInstallingUpdate}
+            className="px-3 py-1 bg-white text-blue-600 rounded text-sm font-semibold hover:bg-blue-50 disabled:opacity-60"
+          >
+            {isInstallingUpdate ? 'Updating…' : 'Update Now'}
+          </button>
+          <button
+            onClick={() => setUpdateDismissed(true)}
+            className="px-3 py-1 border border-white text-white rounded text-sm hover:bg-blue-700"
+          >
+            Dismiss
+          </button>
+        </div>
       </div>
+      {updateError && (
+        <span className="text-sm text-red-100">
+          Update failed: {updateError}
+        </span>
+      )}
     </div>
   )}
 <div className="min-h-screen bg-gray-50 dark:bg-gray-900 dark:text-white p-8">
