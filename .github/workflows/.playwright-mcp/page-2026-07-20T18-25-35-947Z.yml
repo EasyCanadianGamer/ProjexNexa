@@ -1,0 +1,11 @@
+- main [ref=e3]:
+  - generic [ref=e6]:
+    - generic [ref=e7]:
+      - heading "Projects Overview" [level=1] [ref=e8]
+      - paragraph [ref=e9]: Track and manage your active projects
+    - generic [ref=e10]:
+      - textbox "Search projects..." [ref=e12]
+      - button "New Project" [ref=e16]
+      - button "Export to Excel" [ref=e18]
+      - generic [ref=e19] [cursor=pointer]: Import from Excel
+      - button [ref=e20]

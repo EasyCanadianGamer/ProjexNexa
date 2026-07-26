@@ -180,6 +180,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
     dateFormat="yyyy-MM-dd"
     placeholderText="Select a deadline"
     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:border-white dark:focus:border-blue-200 dark:shadow-white"
+    withPortal
   />
 
   

@@ -19,7 +19,7 @@ If you feel comfortable in writing code using Typescript and Rust, we highly enc
   * [X] change modes ( Light, Dark, and System Prefrence)
   * [x] Add a About section
 * [ ] Auto Updates
-* [ ] Change the days left to allow to use dates instead
+* [x] Change the days left to allow to use dates instead
 * [ ] Have it support MacOS, Linux, and Windows
   * [X] MacOS
   * [x] Linux
@@ -76,6 +76,34 @@ We welcome contributions from the community! 🚀
 
 Please check out our [Contribution Guide](CONTRIBUTING.md) for details on how to get started.
 
+
+---
+
+## Release Workflow (cutting a new version)
+
+Releases are driven entirely by git tags in the form `vX.Y.Z`. Pushing a tag is what kicks everything off — there is no manual "run release" button.
+
+1. **Bump the version** in `dashboard/src-tauri/tauri.conf.json` (`"version"` field) to match the release you're about to cut, e.g. `0.1.8`. Commit that change.
+2. **Tag the commit** and push the tag:
+   ```bash
+   git tag v0.1.8
+   git push origin v0.1.8
+   ```
+3. Pushing a `v*` tag triggers two workflows in parallel:
+   * `.github/workflows/build-macOS.yml` — builds the `.app`/`.dmg`, packages `ProjexNexa-homebrew.app.tar.gz`, and creates/updates the GitHub Release for that tag.
+   * `.github/workflows/build-linux.yml` — builds the AppImage/`.deb`/`.rpm` and attaches them to the same Release.
+4. Once the Release is **published**, `.github/workflows/update-homebrew.yml` fires automatically (`on: release: types: [published]`). It:
+   * Downloads `ProjexNexa-homebrew.app.tar.gz` from the latest Release and hashes it.
+   * Rewrites `Formula/projexnexa.rb` in the `EasyCanadianGamer/homebrew-projexnexa` tap repo with the new URL + sha256.
+   * Commits and pushes that formula update using the `PAT_TOKEN` secret (needs write access to the tap repo).
+
+**All three workflows also support `workflow_dispatch`** (manual "Run workflow" button in the Actions tab) if you need to re-run one without pushing a new tag — e.g. re-running `update-homebrew.yml` by hand if the formula update failed but the Release already exists.
+
+**Gotchas to remember:**
+* **Nothing bumps the version automatically.** Step 1 (editing `tauri.conf.json`) is manual — none of the three workflows touch that file. If you tag without bumping it first, the built app will report the old version even though the GitHub Release/Homebrew formula say otherwise.
+* The tag (`vX.Y.Z`) and `tauri.conf.json`'s `"version"` should stay in sync — the tag is what names the GitHub Release and Homebrew formula, but the app itself reports whatever's in `tauri.conf.json`.
+* `update-homebrew.yml` only runs off the **latest** published Release via the GitHub API, so don't publish releases out of order.
+* Secrets required: `TAURI_SIGNING_PRIVATE_KEY` (build signing, both platforms), `PAT_TOKEN` (push access to the separate `homebrew-projexnexa` tap repo).
 
 ---
 
