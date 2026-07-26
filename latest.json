@@ -1,23 +1,19 @@
 {
   "version": "0.1.81",
   "notes": "Linux support + Auto Updates",
-  "pub_date": "2026-06-28T00:00:00Z",
+  "pub_date": "2026-07-26T18:43:45.000Z",
   "platforms": {
     "linux-x86_64": {
-      "url": "https://github.com/EasyCanadianGamer/ProjexNexa/releases/download/0.1.81/ProjexNexa_0.1.7_amd64.AppImage.tar.gz",
-      "signature": ""
+      "url": "https://github.com/EasyCanadianGamer/ProjexNexa/releases/download/v0.1.81/ProjexNexa_0.1.81_amd64.AppImage",
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSVk1aSkpoMmx0N3hydkx3WWlpeHNVS0NlRjZreTE3eGNJWUlXbWNWOHBuc3hzTXliWStnaXk1eFBLbGRHNFZYOGpKTncwVXBsOTcwZ0ZOVTlndW1ncFdHTHRUTjQ0MlFFPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzg1MDkxODI1CWZpbGU6UHJvamV4TmV4YV8wLjEuODFfYW1kNjQuQXBwSW1hZ2UKbVlwRkpOWFJTZ3IycG9PTDZiZm4vWmJ0ZEdQM2FBNWV5V29SeFdsMi82akxpOXVCdnhFeENIZ0dhVXZlWllnZkpxdDM0TkU2dzJyL0pjZWhSdmg0Qmc9PQo="
     },
     "darwin-aarch64": {
-      "url": "https://github.com/EasyCanadianGamer/ProjexNexa/releases/download/0.1.81/ProjexNexa.app.tar.gz",
-      "signature": ""
+      "url": "https://github.com/EasyCanadianGamer/ProjexNexa/releases/download/v0.1.81/ProjexNexa.app.tar.gz",
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSVk1aSkpoMmx0NzJxQVUzY2dFcmJyWUsvOGU0S2hpT0tWc0FaTFdEaURFclFndHM4MHNKb3p4M29GRnBKdDN3NUxCVENSNFlFbVRscVN2eGgydGRBSjVleGtZZ0g4bGdBPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzg1MDkwMDY1CWZpbGU6UHJvamV4TmV4YS5hcHAudGFyLmd6CmJ3UGV0c2hMem1xcHdnYmVTNGVEYk1zVWpjbEpFTENPSXlGZEZkMVFrRlBVU1hPYU1NWmI1emNSTTlZUXVoT2dLQVppK2ZZek05TTFyWkx6bVljeUF3PT0K"
     },
     "darwin-x86_64": {
-      "url": "https://github.com/EasyCanadianGamer/ProjexNexa/releases/download/0.1.81/ProjexNexa.app.tar.gz",
-      "signature": ""
-    },
-    "windows-x86_64": {
-      "url": "https://github.com/EasyCanadianGamer/ProjexNexa/releases/download/0.1.81/ProjexNexa_0.1.7_x64-setup.exe",
-      "signature": ""
+      "url": "https://github.com/EasyCanadianGamer/ProjexNexa/releases/download/v0.1.81/ProjexNexa.app.tar.gz",
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSVk1aSkpoMmx0NzJxQVUzY2dFcmJyWUsvOGU0S2hpT0tWc0FaTFdEaURFclFndHM4MHNKb3p4M29GRnBKdDN3NUxCVENSNFlFbVRscVN2eGgydGRBSjVleGtZZ0g4bGdBPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzg1MDkwMDY1CWZpbGU6UHJvamV4TmV4YS5hcHAudGFyLmd6CmJ3UGV0c2hMem1xcHdnYmVTNGVEYk1zVWpjbEpFTENPSXlGZEZkMVFrRlBVU1hPYU1NWmI1emNSTTlZUXVoT2dLQVppK2ZZek05TTFyWkx6bVljeUF3PT0K"
     }
   }
 }
